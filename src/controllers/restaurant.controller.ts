@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import { T } from "../libs/types/common"
 
-const memberController: T = {};
+const restaurantController: T = {};
 
-memberController.goHome = (req: Request, res: Response) => {
+restaurantController.goHome = (req: Request, res: Response) => {
     try {
         res.send('Home Page');
     }
@@ -12,7 +12,7 @@ memberController.goHome = (req: Request, res: Response) => {
     }
 };
 
-memberController.getLogin = (req: Request, res: Response) => {
+restaurantController.getLogin = (req: Request, res: Response) => {
     try {
         res.send('Login Page');
     }
@@ -21,7 +21,7 @@ memberController.getLogin = (req: Request, res: Response) => {
     }
 };
 
-memberController.getSignup = (req: Request, res: Response) => {
+restaurantController.getSignup = (req: Request, res: Response) => {
     try {
         res.send('Signup Page');
     }
@@ -30,4 +30,4 @@ memberController.getSignup = (req: Request, res: Response) => {
     }
 };
 
-export default memberController;
+export default restaurantController;
