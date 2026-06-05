@@ -8,3 +8,9 @@
       css => SNAKE
 - Error handling 
 */
+
+/*
+   Traditinal Api
+   Rest Api
+   GraphQL Api
+*/
