@@ -1,8 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { MemberStatus, MemberType } from '../libs/enums/member.enum';
 
-// Schema first & Code first
-
+// STEP 10: Ma'lumotlar strukturasi va validatsiyasini tekshirish
 const memberSchema = new Schema({
     memberType: {
         type: String,
@@ -54,4 +53,5 @@ const memberSchema = new Schema({
     { timestamps: true } // updatedAt,  createdAt
 );
 
+// STEP 9: Schema asosida MongoDB bilan ishlash
 export default mongoose.model('Member', memberSchema)

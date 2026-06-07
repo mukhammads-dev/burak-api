@@ -6,17 +6,17 @@ import morgan from "morgan";
 import { MORGAN_FORMAT } from "./libs/config";
 
 /** 1-ENTRANCE **/
-const app = express();
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(morgan(MORGAN_FORMAT));
+const app = express(); // Expresni call qilib app object yasayapmiz
+app.use(express.static(path.join(__dirname, "public"))); // Middleware DP => Public folder tashqi muxitga ochish
+app.use(express.urlencoded({ extended: true })); // M DP => Traditional API support
+app.use(express.json()); // M DP => Rest API support
+app.use(morgan(MORGAN_FORMAT)); // M DP => logging support
 
 /** 2-SESSIONS **/
 
 /** 3-VIEWS **/
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs'); // html quradigon engine EJS
 
 /** 4-ROUTERS **/
 app.use("/admin", routerAdmin);  // BSSR: EJS, Traditional frontend development = Adminka
@@ -24,4 +24,4 @@ app.use("/", router);            // SPA: REACT userlar uchun loyihamizga ishlata
 
 
 
-export default app; 
+export default app;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
