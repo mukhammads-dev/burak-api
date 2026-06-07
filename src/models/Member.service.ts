@@ -3,6 +3,7 @@ import { LoginInput, Member, MemberInput } from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { MemberType } from "../libs/enums/member.enum";
 import { error } from "console";
+import * as bcrypt from "bcryptjs";
 
 
 
@@ -22,6 +23,9 @@ class MemberService {
             .exec();
         // STEP 7: Mavjud bo'lsa signupni to'xtatish
         if (exist) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
+
+        const salt = await bcrypt.genSalt();
+        input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
 
         try {
             // STEP 8: Yangi memberni databasega saqlash
@@ -47,7 +51,8 @@ class MemberService {
 
         if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 
-        const isMatch = input.memberPassword === member.memberPassword;
+        const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
+        //  const isMatch = input.memberPassword === member.memberPassword;
 
         if (!isMatch) {
             throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
