@@ -1,1 +1,1 @@
-console.log("FRONTEND JS STARTS")
+console.log("FRONTEND JS STARTS") 
