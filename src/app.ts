@@ -19,8 +19,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs'); // html quradigon engine EJS
 
 /** 4-ROUTERS **/
-app.use("/admin", routerAdmin);  // BSSR: EJS, Traditional frontend development = Adminka
-app.use("/", router);            // SPA: REACT userlar uchun loyihamizga ishlatamiz
+app.use("/admin", routerAdmin);  // BSSR: EJS, Traditional FD = Adminka
+app.use("/", router);            // SPA: REACT, user's app
 
 
 
