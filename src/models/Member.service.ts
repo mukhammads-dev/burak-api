@@ -18,16 +18,21 @@ class MemberService {
     /** SPA=========== */
     // Define
     public async signup(input: MemberInput): Promise<Member> {
+        /// STEP 3: 
         const salt = await bcrypt.genSalt();
+        // STEP 4: 
         input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
 
         try {
+            // STEP 5: 
             const result = await this.memberModel.create(input);
-
+            // STEP 6: 
             result.memberPassword = "";
 
+            // STEP 7: 
             return result.toJSON();
         } catch (err) {
+            // STEP 10: 
             console.error("Error, model:signup", err);
             throw new Errors(HttpCode.BAD_REQUEST, Message.USED_NICK_PHONE);
         }
@@ -36,22 +41,23 @@ class MemberService {
     public async login(input: LoginInput): Promise<Member> {
         // TODO: Consider member status later 
         const member = await this.memberModel
+            // STEP 3
             .findOne(
                 { memberNick: input.memberNick },
                 { memberNick: 1, memberPassword: 1 }
             )
             .exec();
-
+        // STEP 4
         if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 
-
+        // STEP 5 password checking
         const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
-
+        // STEP 6:
         if (!isMatch) {
             throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
         }
-
-        return await this.memberModel.findById(member._id).lean().exec(); // lean => change
+        // STEP 7: Password to'g'ri bo'lsa to'liq memberni olish
+        return await this.memberModel.findById(member._id).lean().exec(); // lean => only data 
     }
 
     /** BSSR============ */
