@@ -63,11 +63,11 @@ class MemberService {
     /** BSSR============ */
     // Define
     public async processSignup(input: MemberInput): Promise<Member> {
-        // STEP 6: Restaurant owner mavjudligini tekshirish
+        //STEP 6: Restaurant owner mavjudligini tekshirish
         const exist = await this.memberModel
             .findOne({ memberType: MemberType.RESTAURANT })
             .exec();
-        // STEP 7: Mavjud bo'lsa signupni to'xtatish
+        //STEP 7: Mavjud bo'lsa signupni to'xtatish
         if (exist) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
 
         const salt = await bcrypt.genSalt();
