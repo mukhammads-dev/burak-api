@@ -16,7 +16,6 @@ class MemberService {
     }
 
     /** SPA=========== */
-    // Define
     public async signup(input: MemberInput): Promise<Member> {
         /// STEP 3: 
         const salt = await bcrypt.genSalt();
@@ -61,7 +60,6 @@ class MemberService {
     }
 
     /** BSSR============ */
-    // Define
     public async processSignup(input: MemberInput): Promise<Member> {
         //STEP 6: Restaurant owner mavjudligini tekshirish
         const exist = await this.memberModel
@@ -76,7 +74,7 @@ class MemberService {
         try {
             // STEP 8: Yangi memberni databasega saqlash
             const result = await this.memberModel.create(input);
-            // STEP 11: Passwordni response uchun yashirish
+            // STEP 11: Passwordni delete holda qaytarish
             result.memberPassword = "";
             // STEP 12: Natijani Controllerga qaytarish
             return result;
@@ -86,7 +84,7 @@ class MemberService {
     }
 
     public async processLogin(input: LoginInput): Promise<Member> {
-        // STEP 4: Username boyicha memberni qidirish
+        // STEP 4: Faqat nick va password ni ol
         const member = await this.memberModel
             .findOne(
                 { memberNick: input.memberNick },

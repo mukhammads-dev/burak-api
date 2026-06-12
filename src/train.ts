@@ -21,6 +21,30 @@
    Modern FD => SPA (user's app) => React
 */
 
+
+/**
+ * R-TASK
+Shunday function yozing, u string parametrga ega bolsin. String "1+2" holatda pass 
+qilinganda string ichidagi sonlar yigindisini number holatda qaytarsin.
+MASALAN: calculate("1+3") return 4;
+ */
+
+function calculate(prop: string) {
+   let result = 0
+   const x = prop.split("+")
+   for (const item of x) {
+      Number(item)
+      result += Number(item)
+   }
+   return result
+
+}
+console.log(calculate("1+3"))
+
+
+
+
+
 /**
  TASK Q:
 Shunday function yozing, u 2 ta parametrga ega bo'lib
@@ -30,7 +54,7 @@ biror bir propertysiga mos kelsa, 'true', aks holda mos kelmasa 'false' qaytarsi
 
 MASALAN: hasProperty({ name: "BMW", model: "M3" }, "model"); return true;
 Ushbu misolda, 'model' string, objectning propertysiga mos kelganligi uchun 'true' natijani qaytarmoqda
- */
+
 
 function hasProperty(obj: object, prop: string) {
    for (const key in obj) {
@@ -41,3 +65,4 @@ function hasProperty(obj: object, prop: string) {
    return false
 }
 console.log(hasProperty({ name: "BMW", model: "M3" }, "model"));
+ */

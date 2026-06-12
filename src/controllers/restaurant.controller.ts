@@ -54,8 +54,8 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
         // STEP 4: Service object process method call va newMember argument resultga tenglash 
         const result = await memberService.processSignup(newMember);
 
-        // AUTH
-        req.session.member = result;
+        // AUTH — SESSION GA SAQLASH
+        req.session.member = result;  // Sessiyaga member ma'lumotini yoz
         req.session.save(function () {
             res.send(result);
         });
