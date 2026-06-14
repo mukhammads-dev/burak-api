@@ -59,24 +59,29 @@ class MemberService {
         return await this.memberModel.findById(member._id).lean().exec(); // lean => only data 
     }
 
+
+
+
     /** BSSR============ */
     public async processSignup(input: MemberInput): Promise<Member> {
-        //STEP 6: Restaurant owner mavjudligini tekshirish
+        //STEP 4: Restaurant owner mavjudligini tekshirish
         const exist = await this.memberModel
             .findOne({ memberType: MemberType.RESTAURANT })
             .exec();
-        //STEP 7: Mavjud bo'lsa signupni to'xtatish
+        //STEP 5: Mavjud bo'lsa signupni to'xtatish
         if (exist) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
 
+        // STEP 6: Paroldan salt (tasodifiy belgilar) yaratadi
         const salt = await bcrypt.genSalt();
+        // STEP 7: Parolni hash ga aylantiradi
         input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
 
         try {
             // STEP 8: Yangi memberni databasega saqlash
             const result = await this.memberModel.create(input);
-            // STEP 11: Passwordni delete holda qaytarish
+            // STEP 9: Passwordni delete holda qaytarish
             result.memberPassword = "";
-            // STEP 12: Natijani Controllerga qaytarish
+            // STEP 10: Natijani Controllerga qaytarish
             return result;
         } catch (err) {
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
@@ -84,23 +89,23 @@ class MemberService {
     }
 
     public async processLogin(input: LoginInput): Promise<Member> {
-        // STEP 4: Faqat nick va password ni ol
+        // STEP 3: DB dan faqat nick va password ni qidiradi
         const member = await this.memberModel
             .findOne(
                 { memberNick: input.memberNick },
                 { memberNick: 1, memberPassword: 1 }
             )
             .exec();
-        // STEP 5: Member topilmasa xato qaytarish
+        // STEP 4: Member topilmasa Error
         if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 
-        // STEP 6: Kiritilgan passwordni tekshirish
+        // STEP 5: parol to'g'rimi?
         const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
-        // STEP 7: Password notogri bo'lsa xato qaytarish
+        // STEP 6: noto'g'ri bo'lsa Error
         if (!isMatch) {
             throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
         }
-        // STEP 8: Toliq member malumotlarini olish
+        // STEP 7: hammasi to'g'ri → to'liq memberni qaytaradi
         return await this.memberModel.findById(member._id).exec();
     }
 }

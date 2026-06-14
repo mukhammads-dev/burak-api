@@ -12,7 +12,6 @@ restaurantController.goHome = (req: Request, res: Response) => {
     try {
         console.log('goHome')
         res.render("home");
-        // send | json | redirect | end | render
     }
     catch (err) {
         console.log("Error, goHome:", err)
@@ -38,6 +37,7 @@ restaurantController.getLogin = (req: Request, res: Response) => {
     }
     catch (err) {
         console.log("Error, getLogin:", err);
+        console.log("=====")
         res.redirect("/admin");
     }
 };
@@ -45,19 +45,20 @@ restaurantController.getLogin = (req: Request, res: Response) => {
 restaurantController.processSignup = async (req: AdminRequest, res: Response) => {
     try {
         console.log('processSignup')
-        // STEP 1: req.body kelgan malumotni newMemberga tengladik
+        // STEP 1: 
         const newMember: MemberInput = req.body;
 
-        // STEP 2: New memberga restaurant type biriktirish
+        // STEP 2: Restaurant enamdi new memberga biriktiryapmiz
         newMember.memberType = MemberType.RESTAURANT;
 
-        // STEP 4: Service object process method call va newMember argument resultga tenglash 
+        // STEP 3:
         const result = await memberService.processSignup(newMember);
 
-        // AUTH — SESSION GA SAQLASH
-        req.session.member = result;  // Sessiyaga member ma'lumotini yoz
+        // STEP 10: AUTH 
+        req.session.member = result; // bu yerda frontend cookien ichiga seed ni joylab keladi
+        // STEP 11: AUTH — MongoDB "sessions" collectioniga saqlaydi, keyin response yuboradi
         req.session.save(function () {
-            res.send(result);
+            res.send(result); // ← browser Set-Cookie: connect.sid=xxx oladi
         });
 
     }
@@ -74,16 +75,12 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
 restaurantController.processLogin = async (req: AdminRequest, res: Response) => {
     try {
         console.log('processLogin')
-        console.log("body:", req.body)
-        // STEP 1: req.body kelgan malumotni inputga tengladik
-        const input: LoginInput = req.body;
 
-        // STEP 3: memberService object process method call va input argument resultga tenglash 
+        const input: LoginInput = req.body;
         const result = await memberService.processLogin(input);
 
-        // AUTH
-        req.session.member = result;
-        req.session.save(function () {
+        req.session.member = result; // browser cookie (sid) save
+        req.session.save(function () { // DB.session + member save
             res.send(result);
         });
     }
@@ -114,6 +111,7 @@ restaurantController.checkAuthSession = async (req: AdminRequest, res: Response)
     try {
         console.log('checkAuthSession')
         if (req.session?.member)
+            // ← DB ga qaytib bormaydi! Cookie → session → memory dan tekshiradi
             res.send(`<script>alert("${req.session.member.memberNick}")</script>`)
         else res.send(`<script>alert("${Message.NOT_AUTHENTICATED}")</script>`);
 
