@@ -15,12 +15,21 @@
    GraphQL Api
 */
 
-
 /*
    Traditinal FD => BSSR (admin) => EJS
    Modern FD => SPA (user's app) => React
 */
 
+/* Cookies:
+   request join
+   self destroy
+*/
+
+/* Validation
+   FRONTEND Validation
+   BECKEND Validation
+   DATABASE Validation
+ */
 
 /**
  * R-TASK
