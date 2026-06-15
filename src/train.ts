@@ -6,7 +6,7 @@
       class => PASCAL
       folder = KEBAB
       css => SNAKE
-- Error handling 
+- Error handling
 */
 
 /*
@@ -31,12 +31,36 @@
    DATABASE Validation
  */
 
+// MIT Tasks ===================
+/*
+S-TASK
+
+Shunday function yozing, u numberlardan tashkil topgan list qabul qilsin 
+va osha numberlar orasidagi tushib qolgan sonni topib uni return qilsin
+MASALAN: missing_number([3, 0, 1]) return 2
+*/
+
+function missing_number(prop: number[]): number {
+   prop.sort((a, b) => a - b);
+
+   let k = 0;
+
+   for (const num of prop) {
+      if (num !== k) return k;
+      k++;
+   }
+
+   return k;
+}
+
+console.log(missing_number([3, 0, 1]));
+
 /**
  * R-TASK
 Shunday function yozing, u string parametrga ega bolsin. String "1+2" holatda pass 
 qilinganda string ichidagi sonlar yigindisini number holatda qaytarsin.
 MASALAN: calculate("1+3") return 4;
- */
+
 
 function calculate(prop: string) {
    let result = 0
@@ -49,10 +73,7 @@ function calculate(prop: string) {
 
 }
 console.log(calculate("1+3"))
-
-
-
-
+*/
 
 /**
  TASK Q:
