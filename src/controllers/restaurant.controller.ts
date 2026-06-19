@@ -3,7 +3,7 @@ import { T } from "../libs/types/common"
 import MemberService from "../models/Member.service";
 import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
 import { MemberType } from "../libs/enums/member.enum";
-import Errors, { Message } from "../libs/Errors";
+import Errors, { HttpCode, Message } from "../libs/Errors";
 
 const memberService = new MemberService();
 const restaurantController: T = {};
@@ -45,20 +45,17 @@ restaurantController.getLogin = (req: Request, res: Response) => {
 restaurantController.processSignup = async (req: AdminRequest, res: Response) => {
     try {
         console.log('processSignup')
-        // STEP 1: 
+        const file = req.file; // uploads.file ushlab oldik
+        if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG); // rest-user image kiritishi shart bolmasa error
+
         const newMember: MemberInput = req.body;
-
-        // STEP 2: Restaurant enamdi new memberga biriktiryapmiz
+        newMember.memberImage = file?.path; // fille-imageni member-imagega joyladik
         newMember.memberType = MemberType.RESTAURANT;
-
-        // STEP 3:
         const result = await memberService.processSignup(newMember);
 
-        // STEP 10: AUTH 
-        req.session.member = result; // bu yerda frontend cookien ichiga seed ni joylab keladi
-        // STEP 11: AUTH — MongoDB "sessions" collectioniga saqlaydi, keyin response yuboradi
+        req.session.member = result;
         req.session.save(function () {
-            res.send(result); // ← browser Set-Cookie: connect.sid=xxx oladi
+            res.redirect("/admin/product/all");
         });
 
     }
@@ -81,7 +78,7 @@ restaurantController.processLogin = async (req: AdminRequest, res: Response) => 
 
         req.session.member = result; // browser cookie (sid) save
         req.session.save(function () { // DB.session + member save
-            res.send(result);
+            res.redirect("/admin/product/all");
         });
     }
     catch (err) {
@@ -121,6 +118,7 @@ restaurantController.checkAuthSession = async (req: AdminRequest, res: Response)
     }
 };
 
+// Murojatchi kim Restoranmi ? unda products pagega otamiz
 restaurantController.veryfyRestaurant = (
     req: AdminRequest,
     res: Response,
@@ -129,7 +127,7 @@ restaurantController.veryfyRestaurant = (
     // req.session icidan member check qilamiz typeRestaurant bolsh shart
     if (req.session?.member?.memberType === MemberType.RESTAURANT) {
         req.member = req.session.member; // type checking
-        next();
+        next(); // Md uchun next qoyilishi shart ekan keyingi process ga otadi
     } else {
         const message = Message.NOT_AUTHENTICATED;
         res.send(

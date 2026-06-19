@@ -11,20 +11,22 @@ routerAdmin
     .post('/login', restaurantController.processLogin);
 routerAdmin
     .get('/signup', restaurantController.getSignup)
-    .post('/signup', makeUploader("members").single("memberImage"), restaurantController.processSignup)
+    .post('/signup',
+        makeUploader("members").single("memberImage"),  // Multer birinchi file yuklab beradi
+        restaurantController.processSignup);
 routerAdmin.get('/logout', restaurantController.logout)
-routerAdmin.get('/check-me', restaurantController.checkAuthSession)
+routerAdmin.get('/check-me', restaurantController.checkAuthSession);
 
 /** Product */
 routerAdmin.get(
     '/product/all',
-    restaurantController.veryfyRestaurant, // MD oraliq mantiq
+    restaurantController.veryfyRestaurant, // 1-chi: MD oraliq mantiq auth tekshiradi agar otsa keyingi api ishlaydi
     productController.getAllProducts
 );
 routerAdmin.post(
     '/product/create',
     restaurantController.veryfyRestaurant,
-    makeUploader("products").array("productImages", 5),
+    makeUploader("products").array("productImages", 5),  // rasm yuklaydi
     productController.createNewProduct
 );
 routerAdmin.post(

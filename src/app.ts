@@ -6,13 +6,13 @@ import morgan from "morgan";
 import { MORGAN_FORMAT } from "./libs/config";
 
 // TCP 2 sessionlar uchun storage yasadik
-import session from "express-session"; // express sess dan session qabul qildik
-import ConnectMongoDB from "connect-mongodb-session"; // session packagedan mongodb qabul qildik
+import session from "express-session";
+import ConnectMongoDB from "connect-mongodb-session";
 import { T } from "./libs/types/common";
-const MongoDBStore = ConnectMongoDB(session) // ikita sessiondan class yaratdik
+const MongoDBStore = ConnectMongoDB(session) // ConnectMongoDB ga sessiondi arg sifatida pass qilsak class beradi 
 const store = new MongoDBStore({
     uri: String(process.env.MONGO_URL), // MongoDB url uladik 
-    collection: 'sessions' // sessions MongoDB da saqlanadi
+    collection: 'sessions' // collectionda sessions MongoDB da saqlanadi 
 });
 
 
@@ -34,14 +34,15 @@ app.use(
         store: store,   // ← MongoDB "sessions" collectioniga yozadi
 
         resave: true,   // Har so'rovda yangilanadi (vaqt uzayadi)
-        saveUninitialized: true // login bolmasaham saqlanadi sid database
+        saveUninitialized: true // login bolmasaham saqlanadi sid databasega statistika uchun
     })
 )
 // req.+session endi Tamga bor
 
+// Middleware for brauzer local variables to use at EJS 
 app.use(function (req, res, next) {
-    const sessionInstance = req.session as T;
-    res.locals.member = sessionInstance.member; // res.locals => brauzer variables
+    const sessionInstance = req.session as T; // req sessiondi constanta sessionInstance ga tengladik
+    res.locals.member = sessionInstance.member; // res.locals.member nomi bilan sessionInstance ichidan kelayotkan memberdi beramiz
     next();
 
 })
