@@ -49,7 +49,7 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
         if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG); // rest-user image kiritishi shart bolmasa error
 
         const newMember: MemberInput = req.body;
-        newMember.memberImage = file?.path; // fille-imageni member-imagega joyladik
+        newMember.memberImage = file?.path.replace(/\\/g, "/"); // fille-imageni member-imagega joyladik
         newMember.memberType = MemberType.RESTAURANT;
         const result = await memberService.processSignup(newMember);
 
