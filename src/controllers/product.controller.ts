@@ -17,7 +17,8 @@ const productController: T = {};
 productController.getAllProducts = async (req: Request, res: Response) => {
     try {
         console.log('getAllProducts')
-        res.render("products")
+        const data = await productService.getAllProducts();
+        res.render("products", { products: data }); // ejs ga qiymat yuborish
     }
     catch (err) {
         console.log("Error, getAllProducts:", err)
