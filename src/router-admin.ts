@@ -20,7 +20,7 @@ routerAdmin.get('/check-me', restaurantController.checkAuthSession);
 /** Product */
 routerAdmin.get(
     '/product/all',
-    restaurantController.veryfyRestaurant, // 1-chi: MD oraliq mantiq auth tekshiradi agar otsa keyingi api ishlaydi
+    restaurantController.veryfyRestaurant,
     productController.getAllProducts
 );
 routerAdmin.post(
@@ -36,5 +36,8 @@ routerAdmin.post(
 );
 
 /** User */
+routerAdmin.get("/user/all", restaurantController.veryfyRestaurant,
+    restaurantController.getUsers
+)
 
 export default routerAdmin;
