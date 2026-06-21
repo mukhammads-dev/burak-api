@@ -36,8 +36,13 @@ routerAdmin.post(
 );
 
 /** User */
-routerAdmin.get("/user/all", restaurantController.veryfyRestaurant,
-    restaurantController.getUsers
-)
+routerAdmin.get(
+    "/user/all",
+    restaurantController.veryfyRestaurant,
+    restaurantController.getUsers)
+routerAdmin.post(
+    "/user/edit",
+    restaurantController.veryfyRestaurant,
+    restaurantController.updateChosenUser)
 
 export default routerAdmin;
