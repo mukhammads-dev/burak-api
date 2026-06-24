@@ -31,11 +31,63 @@
    DATABASE Validation
  */
 
-
 // MIT Tasks ===================
 /*
-TASK U
+TASK V
 
+Shunday function yozing, uni string parametri bo'lsin.
+Va bu function stringdagi har bir harfni o'zi bilan
+necha marotaba taktorlanganligini ko'rsatuvchi object qaytarsin.
+  
+MASALAN: countChars("hello") return {h: 1, e: 1, l: 2, o: 1}
+
+Yuqoridagi misolda, 'hello' so'zi tarkibida
+qatnashgan harflar necha marotaba takrorlangini bilan
+object sifatida qaytarilmoqda.
+*/
+
+function countChars(prop: string) {
+   let result: any = {};
+   for (const a of prop) {
+      if (result[a]) {
+         result[a]++;
+      } else {
+         result[a] = 1
+      }
+   }
+   return result
+
+}
+
+console.log(countChars("success"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+TASK U
 Shunday function tuzing, uni number parametri bo'lsin.
 Va bu function berilgan parametrgacha, 0'dan boshlab
 oraliqda nechta toq sonlar borligini aniqlab return qilsi.
@@ -45,7 +97,7 @@ MASALAN: sumOdds(9) return 4; sumOdds(11) return 5;
 Yuqoridagi birinchi misolda, argument sifatida, 9 berilmoqda.
 Va 0'dan boshlab sanaganda 9'gacha 4'ta toq son mavjud. 
 Keyingi namunada ham xuddi shunday xolat takrorlanmoqda.
-*/
+
 function sumOdds(prop: number) {
    let count = 0
    for (let i = 0; i < prop; i++) {
@@ -58,24 +110,7 @@ function sumOdds(prop: number) {
 
 }
 console.log(sumOdds(11))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 /*
 TASK T
@@ -85,7 +120,6 @@ Va ikkala arraydagi sonlarni tartiblab bir arrayda qaytarsin.
    MASALAN: mergeSortedArrays([0, 3, 4, 31], [4, 6, 30]); return [0, 3, 4, 4, 6, 30, 31];
 
 Yuqoridagi misolda, ikkala arrayni birlashtirib, tartib raqam bo'yicha tartiblab qaytarmoqda.
-
 
 function mergeSortedArrays(arr1: number[], arr2: number[]): number[] {
    let result = arr1.concat(arr2); // ikkita arr qoshish
@@ -105,7 +139,6 @@ S-TASK
 Shunday function yozing, u numberlardan tashkil topgan list qabul qilsin 
 va osha numberlar orasidagi tushib qolgan sonni topib uni return qilsin
 MASALAN: missing_number([3, 0, 1]) return 2
-
 
 function missing_number(prop: number[]): number {
    prop.sort((a, b) => a - b);
@@ -129,7 +162,6 @@ Shunday function yozing, u string parametrga ega bolsin. String "1+2" holatda pa
 qilinganda string ichidagi sonlar yigindisini number holatda qaytarsin.
 MASALAN: calculate("1+3") return 4;
 
-
 function calculate(prop: string) {
    let result = 0
    const x = prop.split("+")
@@ -152,7 +184,6 @@ biror bir propertysiga mos kelsa, 'true', aks holda mos kelmasa 'false' qaytarsi
 
 MASALAN: hasProperty({ name: "BMW", model: "M3" }, "model"); return true;
 Ushbu misolda, 'model' string, objectning propertysiga mos kelganligi uchun 'true' natijani qaytarmoqda
-
 
 function hasProperty(obj: object, prop: string) {
    for (const key in obj) {
