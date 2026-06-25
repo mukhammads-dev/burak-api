@@ -26,7 +26,7 @@ routerAdmin.get(
 routerAdmin.post(
     '/product/create',
     restaurantController.veryfyRestaurant,
-    makeUploader("products").array("productImages", 5),  // rasm yuklaydi
+    makeUploader("products").array("productImages", 5),  // MD multer rasm yuklaydi
     productController.createNewProduct
 );
 routerAdmin.post(

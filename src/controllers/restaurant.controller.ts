@@ -101,7 +101,7 @@ restaurantController.logout = async (req: AdminRequest, res: Response) => {
         res.redirect("/admin")
     }
 };
-// new
+// done
 restaurantController.getUsers = async (req: Request, res: Response) => {
     try {
         console.log('getUsers')
@@ -115,7 +115,7 @@ restaurantController.getUsers = async (req: Request, res: Response) => {
         res.redirect("/admin/login");
     }
 };
-// new
+// done Rest API 
 restaurantController.updateChosenUser = async (req: Request, res: Response) => {
     try {
         console.log('updateChosenUser')
@@ -144,7 +144,7 @@ restaurantController.checkAuthSession = async (req: AdminRequest, res: Response)
         res.send(err);
     }
 };
-
+// done
 restaurantController.veryfyRestaurant = (
     req: AdminRequest,
     res: Response,
