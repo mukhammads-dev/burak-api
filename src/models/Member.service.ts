@@ -1,7 +1,7 @@
 import MemberModel from "../schema/Member.model";
 import { LoginInput, Member, MemberInput, MemberUpdateInput } from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/Errors";
-import { MemberType } from "../libs/enums/member.enum";
+import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import { error } from "console";
 import * as bcrypt from "bcryptjs";
 import { shapeIntoMongooseObjectId } from "../libs/config";
@@ -12,7 +12,7 @@ class MemberService {
     private readonly memberModel;
 
     constructor() {
-        // STEP 5: Model bilan bog'lanish
+        //  Model bilan bog'lanish
         this.memberModel = MemberModel;
     }
 
@@ -41,22 +41,23 @@ class MemberService {
     public async login(input: LoginInput): Promise<Member> {
         // TODO: Consider member status later 
         const member = await this.memberModel
-            // STEP 3
             .findOne(
-                { memberNick: input.memberNick },
-                { memberNick: 1, memberPassword: 1 }
+                // Find qilsin: Nick, kiribkelgan Nick va Status Delete bomagan bolsa login boladi
+                { memberNick: input.memberNick, memberStatus: { $ne: MemberStatus.DELETE } },
+                { memberNick: 1, memberPassword: 1, memberStatus: 1 }
             )
             .exec();
-        // STEP 4
         if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+        else if (member.memberStatus === MemberStatus.BLOCK) {
+            throw new Errors(HttpCode.FORBIDDEN, Message.BLOCKED_USER)
+        }
 
-        // STEP 5 password checking
         const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
-        // STEP 6:
+
         if (!isMatch) {
             throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
         }
-        // STEP 7: Password to'g'ri bo'lsa to'liq memberni olish
+
         return await this.memberModel.findById(member._id).lean().exec(); // lean => only data 
     }
 
