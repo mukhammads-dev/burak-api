@@ -94,7 +94,7 @@ class MemberService {
         // STEP 3: DB dan faqat nick va password ni qidiradi
         const member = await this.memberModel
             .findOne(
-                { memberNick: input.memberNick },
+                { memberNick: input.memberNick, memberType: MemberType.RESTAURANT },
                 { memberNick: 1, memberPassword: 1 }
             )
             .exec();

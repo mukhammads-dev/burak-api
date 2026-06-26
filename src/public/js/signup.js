@@ -8,10 +8,9 @@ $(function () {
     fileTarget.on("change", function () {
         // agar file mavjud bolsa 
         if (window.FileReader) {
-            const uploadFile = $(this)[0].files[0]; // input ichidag file qolga olamiz
-            console.log(uploadFile);
-            const fileType = uploadFile["type"];// type checking
-            const validImageType = ["image/jpg", "image/jpeg", "image/png"]; // ruxsat beradigon typelarimiz
+            const uploadFile = $(this)[0].files[0], // input ichidag file qolga olamiz
+                fileType = uploadFile["type"],// type checking
+                validImageType = ["image/jpg", "image/jpeg", "image/png"]; // ruxsat beradigon typelarimiz
             if (!validImageType.includes(fileType)) {
                 alert("Please insert only jpeg, jpg and png!")
             } else {
@@ -32,10 +31,10 @@ $(function () {
 //FR validation
 function validateSignupForm() {
     // .class + .val = form qiymat olish
-    const memberNick = $(".member-nick").val();
-    const memberPhone = $(".member-phone").val();
-    const memberPassword = $(".member-password").val();
-    const confirmPassword = $(".confirm-password").val();
+    const memberNick = $(".member-nick").val(),
+        memberPhone = $(".member-phone").val(),
+        memberPassword = $(".member-password").val(),
+        confirmPassword = $(".confirm-password").val();
 
     if (
         memberNick === "" ||
