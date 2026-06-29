@@ -68,8 +68,10 @@
                       </td>
                       <td style="width: 13%">
                         <select class="spec-select member-status" id="<%= value._id %>">
-                          <!-- id status select uchun => agar status pause bolsa ? selected bolsin aks holda hech nimani bermasn -->
+                          <!--  ↑ BU MUHIM: har bir select ning ID si = shu userning MongoDB _id si -->
+                          <!--  masalan: id="64abc123efg456" -->
                           <option value="ACTIVE" <%=value.memberStatus==='ACTIVE' ? 'selected' : '' %>>ACTIVE</option>
+                          <!--  agar bu userning hozirgi statusu ACTIVE bo'lsa → "selected" yoziladi -->
                           <option value="BLOCK" <%=value.memberStatus==='BLOCK' ? 'selected' : '' %>>BLOCK</option>
                           <option value="DELETE" <%=value.memberStatus==='DELETE' ? 'selected' : '' %>>DELETE</option>
                         </select>
