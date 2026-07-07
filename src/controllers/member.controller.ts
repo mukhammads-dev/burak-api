@@ -3,21 +3,20 @@ import { T } from "../libs/types/common"
 import MemberService from "../models/Member.service";
 import { LoginInput, Member, MemberInput } from "../libs/types/member";
 import Errors from "../libs/Errors";
+import AuthService from "../models/Auth.service";
 // for users  REACT project 
 const memberService = new MemberService();
-
 const memberController: T = {};
+const authService = new AuthService();
 
 memberController.signup = async (req: Request, res: Response) => {
     try {
         console.log('signup')
-        // STEP 1: 
         const input: MemberInput = req.body,
-            // STEP 2:
-            result: Member = await memberService.signup(input); //call
-        // TODO: TOKENS AUTHENTICATION
+            result: Member = await memberService.signup(input),
+            token = await authService.createToken(result);
+        console.log("token=>:", token)
 
-        // STEP 7:
         res.json({ member: result });
     }
     catch (err) {
@@ -30,13 +29,11 @@ memberController.signup = async (req: Request, res: Response) => {
 memberController.login = async (req: Request, res: Response) => {
     try {
         console.log('login')
-        // STEP 1
         const input: LoginInput = req.body,
+            result = await memberService.login(input),
+            token = await authService.createToken(result)
+        console.log("token:", token)
 
-            //STEP 2
-            result = await memberService.login(input);
-        // TODO: TOKENS AUTHENTICATION
-        // STEP 8
         res.json({ member: result });
     }
     catch (err) {
