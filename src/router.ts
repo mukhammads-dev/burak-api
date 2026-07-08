@@ -9,7 +9,9 @@ router.post("/member/logout",
     memberController.veryfyAuth,
     memberController.logout);
 // credential checking
-router.get("/member/detail", memberController.veryfyAuth);
+router.get("/member/detail",
+    memberController.veryfyAuth,
+    memberController.getMemberDetail);
 
 
 /** Product */

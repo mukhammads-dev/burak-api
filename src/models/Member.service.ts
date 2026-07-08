@@ -61,6 +61,15 @@ class MemberService {
         return await this.memberModel.findById(member._id).lean().exec(); // lean => only data 
     }
 
+    public async getMemberDetail(member: Member): Promise<Member> {
+        const memeberId = shapeIntoMongooseObjectId(member._id);
+        const result = await this.memberModel
+            .findOne({ _id: memeberId, memberStatus: MemberStatus.ACTIVE })
+            .exec();
+        if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND)
+        return result
+    }
+
 
 
 
