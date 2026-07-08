@@ -13,20 +13,23 @@ class AuthService {
     public async createToken(payload: Member) {
         return new Promise((resolve, reject) => {
             const duration = `${AUTH_TIMER}h`;
-            // 4 arg => payload:qaysi malumot, private-key, expiresIn
-            jwt.sign(payload, process.env.SECRET_TOKEN as string, {
-                expiresIn: duration,
+            jwt.sign(payload, // nima saqlash → member ma'lumoti
+                process.env.SECRET_TOKEN as string, { // 2: maxfiy kalit → yasash uchun
+                expiresIn: duration, // 3: qachon tugaydi → 3 soatdan keyin
             }, (err, token) => {
                 if (err) reject(new Errors(HttpCode.UNAUTHORIZED, Message.TOKEN_CREATION_FAILED));
-                else resolve(token as string);
+                else resolve(token as string); // token qaytaradi
             });
         });
     }
 
     public async checkAuth(token: string): Promise<Member> {
-        const result: Member = (await jwt.verify( // bu package token malumotni chiqazib beradi
-            token, this.secretToken
+        const result: Member = (await jwt.verify( // browserdan kelgan token
+            token, this.secretToken               // maxfiy kalit bilan tekshiradi
         )) as Member;
+        // token o'zgartirilgan bo'lsa → xato chiqaradi
+        // vaqti o'tgan bo'lsa → xato chiqaradi
+        // hammasi to'g'ri → member ma'lumotini qaytaradi
         console.log(`---- [AUTH] memberNick: ${result.memberNick} ---`);
         return result;
     }

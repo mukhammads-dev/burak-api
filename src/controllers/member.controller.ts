@@ -1,7 +1,7 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { T } from "../libs/types/common"
 import MemberService from "../models/Member.service";
-import { LoginInput, Member, MemberInput } from "../libs/types/member";
+import { ExtendedRequest, LoginInput, Member, MemberInput } from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import AuthService from "../models/Auth.service";
 import { AUTH_TIMER } from "../libs/config";
@@ -15,6 +15,8 @@ memberController.signup = async (req: Request, res: Response) => {
         console.log('signup')
         const input: MemberInput = req.body,
             result: Member = await memberService.signup(input),
+
+            // STEP : member ma'lumotidan JWT token yaratdi
             token = await authService.createToken(result);
 
         // accessToken nomi bilan brauzer cookie ichiga joylaymiz
@@ -22,7 +24,7 @@ memberController.signup = async (req: Request, res: Response) => {
             maxAge: AUTH_TIMER * 3600 * 1000,
             httpOnly: false //
         });
-
+        // STEP 5: JSON qaytaradi — member va token ikkalasini
         res.status(HttpCode.CREATED).json({ member: result, accessToken: token });
     }
     catch (err) {
@@ -55,17 +57,35 @@ memberController.login = async (req: Request, res: Response) => {
     }
 };
 
-// credential checking
+memberController.logout = (req: ExtendedRequest, res: Response) => {
+    try {
+        console.log("logout");
+        res.cookie("accessToken", null, { maxAge: 0, httpOnly: true })
+        res.status(HttpCode.OK).json({ logout: true });
+    } catch (err) {
+        console.log("Error, login:", err)
+        if (err instanceof Errors) res.status(err.code).json(err)
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
 
-memberController.veryfyAuth = async (req: Request, res: Response) => {
+
+
+
+
+
+
+// credential checking strict 
+memberController.veryfyAuth = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
     let member = null; // token mavjud bolsa ozgartiramiz
     try {
+        // STEP 1: cookie dan tokenni oladi
         const token = req.cookies["accessToken"]; // token mavjudmi checking
-        if (token) member = await authService.checkAuth(token);
-
-        if (!member) throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
-        console.log("member:", member)
-        res.status(HttpCode.OK).json({ member: member, });
+        // STEP 2: token bor bo'lsa → checkAuth ga uzatadi
+        if (token) req.member = await authService.checkAuth(token);
+        if (!req.member)
+            throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
+        next()
 
     } catch (err) {
         console.log("Error, veryfyAuth:", err)
@@ -74,6 +94,27 @@ memberController.veryfyAuth = async (req: Request, res: Response) => {
     }
 
 };
+
+
+
+memberController.retrieveAuth = async (
+    req: ExtendedRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const token = req.cookies["accessToken"];
+        if (token) req.member = await authService.checkAuth(token);
+        // STEP 2: member nomi bilan req ichiga joylab bersin mantigni
+
+        next()
+    } catch (err) {
+        console.log("Error, veryfyAuth:", err)
+        next()
+    }
+
+};
+
 
 
 
