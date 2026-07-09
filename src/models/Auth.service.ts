@@ -9,7 +9,7 @@ class AuthService {
     constructor() {
         this.secretToken = process.env.SECRET_TOKEN as string;
     }
-    // argument type member boladi
+
     public async createToken(payload: Member) {
         return new Promise((resolve, reject) => {
             const duration = `${AUTH_TIMER}h`;
@@ -24,12 +24,10 @@ class AuthService {
     }
 
     public async checkAuth(token: string): Promise<Member> {
-        const result: Member = (await jwt.verify( // browserdan kelgan token
-            token, this.secretToken               // maxfiy kalit bilan tekshiradi
+        const result: Member = (await jwt.verify(
+            token, this.secretToken
         )) as Member;
-        // token o'zgartirilgan bo'lsa → xato chiqaradi
-        // vaqti o'tgan bo'lsa → xato chiqaradi
-        // hammasi to'g'ri → member ma'lumotini qaytaradi
+
         console.log(`---- [AUTH] memberNick: ${result.memberNick} ---`);
         return result;
     }
