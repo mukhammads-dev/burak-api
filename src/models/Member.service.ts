@@ -17,6 +17,17 @@ class MemberService {
     }
 
     /** SPA=========== */
+    public async getRestaurant(): Promise<Member> {
+        const result = await this.memberModel
+            .findOne({ memberType: MemberType.RESTAURANT })
+            .lean() // plain JS objectga ogirib beradi documentni uni biz ozgartirsak boladi
+            .exec();
+
+        if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+        return result;
+    }
+
     public async signup(input: MemberInput): Promise<Member> {
         /// STEP 3: 
         const salt = await bcrypt.genSalt();
@@ -81,7 +92,6 @@ class MemberService {
 
     }
 
-
     public async getTopUsers(): Promise<Member[]> {
         const result = await this.memberModel
             .find({
@@ -96,6 +106,10 @@ class MemberService {
 
         return result;
     }
+
+
+
+
 
 
     /** BSSR============ */
