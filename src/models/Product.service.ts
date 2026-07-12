@@ -1,6 +1,8 @@
 import { shapeIntoMongooseObjectId } from "../libs/config";
+import { ProductStatus } from "../libs/enums/product.enum";
 import Errors, { HttpCode, Message } from "../libs/Errors";
-import { Product, ProductInput, ProductUpdateInput } from "../libs/types/product";
+import { T } from "../libs/types/common";
+import { Product, ProductInput, ProductInquiry, ProductUpdateInput } from "../libs/types/product";
 import ProductModel from "../schema/Product.model";
 
 
@@ -12,8 +14,40 @@ class ProductService {
     }
 
     /** SPA=========== */
-    /** BSSR============ */
 
+    public async getProducts(inquiry: ProductInquiry): Promise<Product[]> {
+        const match: T = { productStatus: ProductStatus.PROCESS };
+
+        if (inquiry.productCollection)
+            match.productCollection = inquiry.productCollection;
+
+        if (inquiry.search) {
+            match.productName = { $regex: new RegExp(inquiry.search, "i") };
+        }
+
+        const sort: T =
+            inquiry.order === "productPrice"
+                ? { [inquiry.order]: 1 } // prise: eng arzonidan yuqoriga
+                : { [inquiry.order]: -1 }; // created at: eng ohirgi qoshilgandan pastga qarab
+
+        const result = await this.productModel
+            .aggregate([
+                { $match: match },
+                { $sort: sort },
+                { $skip: (inquiry.page * 1 - 1) * inquiry.limit }, // skip qil limitga qarab
+                { $limit: inquiry.limit * 1 },  // skipdan keyingi page olib ber
+            ])
+            .exec();
+
+        if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+        return result;
+    }
+
+
+
+
+    /** BSSR============ */
     public async getAllProducts(): Promise<Product[]> { // array ichida bir qator productlarni qaytarishi kerak
         // STEP 2: MongoDB dan BARCHA productlarni oladi (.find() = filter yo'q = hammasi)
         const result = await this.productModel.find().exec();
