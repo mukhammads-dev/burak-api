@@ -25,7 +25,7 @@ router.get("/member/top-users", memberController.getTopUsers);
 
 /** Product */
 router.get("/product/all", productController.getProducts);
-router.get("/product/:id",
+router.get("/product/:id", // done
     memberController.retrieveAuth,
     productController.getProduct
 );

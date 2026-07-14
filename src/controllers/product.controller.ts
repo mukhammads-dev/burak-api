@@ -17,7 +17,7 @@ productController.getProducts = async (req: Request, res: Response) => {
     try {
         console.log("getProducts");
 
-        const { page, limit, order, productCollection, search } = req.query; 3
+        const { page, limit, order, productCollection, search } = req.query;
 
         const inquiry: ProductInquiry = { // object yaratish
             order: String(order), // "createdAt" — qaysi fieldga qarab tartiblash
@@ -63,6 +63,7 @@ productController.getProduct = async (req: ExtendedRequest, res: Response) => {
         else res.status(Errors.standard.code).json(Errors.standard);
     }
 };
+
 
 
 /** BSSR============ */

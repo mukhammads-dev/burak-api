@@ -24,10 +24,11 @@ class ProductService {
     public async getProducts(inquiry: ProductInquiry): Promise<Product[]> {
         const match: T = { productStatus: ProductStatus.PROCESS };
 
-        if (inquiry.productCollection)
+        if (inquiry.productCollection) //agar productCollection bolsa matchga tenglaymiz
             match.productCollection = inquiry.productCollection;
 
-        if (inquiry.search) {
+        if (inquiry.search) {    // agar search bolsa match productName ga tenglaymiz
+            // MongoDB ga: "productName ichida 'lav' bo'lgan hamma narsani top"
             match.productName = { $regex: new RegExp(inquiry.search, "i") };
         }
 
@@ -38,7 +39,7 @@ class ProductService {
 
         const result = await this.productModel
             .aggregate([
-                { $match: match },
+                { $match: match }, // proccessda bolgan productlarn olib beradi
                 { $sort: sort },
                 { $skip: (inquiry.page * 1 - 1) * inquiry.limit }, // skip qil limitga qarab
                 { $limit: inquiry.limit * 1 },  // skipdan keyingi page olib ber
