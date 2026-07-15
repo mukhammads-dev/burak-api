@@ -25,7 +25,7 @@ router.get("/member/top-users", memberController.getTopUsers);
 
 /** Product */
 router.get("/product/all", productController.getProducts); // check
-router.get("/product/:id", // done
+router.get("/product/:id", // check
     memberController.retrieveAuth,
     productController.getProduct);
 /** Order */
@@ -36,5 +36,9 @@ router.post("/order/create",
 router.get("/order/all",
     memberController.veryfyAuth,
     orderController.getMyOrders); // check
+
+router.post("/order/update",
+    memberController.veryfyAuth,
+    orderController.updateOrder); // check
 
 export default router; 
