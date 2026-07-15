@@ -19,21 +19,22 @@ router.get("/member/detail",
 router.post("/member/update",
     memberController.veryfyAuth,
     uploader("members").single("memberImage"), // uploads members filega memberImage nomi bilan saqlashini korsatdik
-    memberController.updateMember
-);
+    memberController.updateMember);
 
 router.get("/member/top-users", memberController.getTopUsers);
 
 /** Product */
-router.get("/product/all", productController.getProducts);
+router.get("/product/all", productController.getProducts); // check
 router.get("/product/:id", // done
     memberController.retrieveAuth,
-    productController.getProduct
-);
+    productController.getProduct);
 /** Order */
 router.post("/order/create",
     memberController.veryfyAuth,
-    orderController.createOrder
-);
+    orderController.createOrder); // check
+
+router.get("/order/all",
+    memberController.veryfyAuth,
+    orderController.getMyOrders); // check
 
 export default router; 
