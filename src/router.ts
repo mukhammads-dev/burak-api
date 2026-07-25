@@ -18,16 +18,16 @@ router.get("/member/detail",
 
 router.post("/member/update",
     memberController.veryfyAuth,
-    uploader("members").single("memberImage"), // uploads members filega memberImage nomi bilan saqlashini korsatdik
+    uploader("members").single("memberImage"),
     memberController.updateMember);
 
 router.get("/member/top-users", memberController.getTopUsers);
 
 /** Product */
 router.get("/product/all", productController.getProducts); // check
-router.get("/product/:id", // check
+router.get("/product/:id",
     memberController.retrieveAuth,
-    productController.getProduct);
+    productController.getProduct); // done
 /** Order */
 router.post("/order/create",
     memberController.veryfyAuth,
@@ -39,6 +39,6 @@ router.get("/order/all",
 
 router.post("/order/update",
     memberController.veryfyAuth,
-    orderController.updateOrder); // check
+    orderController.updateOrder); // done
 
 export default router; 

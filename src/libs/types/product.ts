@@ -13,6 +13,8 @@ export interface Product {
     productDesc?: string; // mavjud bolmasligi mumkun
     productImages: string[];
     productViews: number;
+    createdAt: Date;
+    updatedAt: Date
 }
 
 export interface ProductInquiry {

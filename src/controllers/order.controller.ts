@@ -15,6 +15,8 @@ orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
         console.log("createOrder");
 
         const result = await orderService.createOrder(req.member, req.body);
+        //                                             ↑           ↑
+        //                                          kim?       nima buyurtma?
 
         res.status(HttpCode.CREATED).json(result);
     } catch (err) {
@@ -45,6 +47,7 @@ orderController.getMyOrders = async (req: ExtendedRequest, res: Response) => {
         else res.status(Errors.standard.code).json(Errors.standard);
     }
 };
+
 orderController.updateOrder = async (req: ExtendedRequest, res: Response) => {
     try {
         console.log("updateOrder");
